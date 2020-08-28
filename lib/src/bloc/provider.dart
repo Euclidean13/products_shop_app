@@ -1,8 +1,13 @@
 import 'package:flutter/material.dart';
-
-import 'login_bloc.dart';
+import 'package:products_shop_app/src/bloc/login_bloc.dart';
+export 'package:products_shop_app/src/bloc/login_bloc.dart';
+import 'package:products_shop_app/src/bloc/products_bloc.dart';
+export 'package:products_shop_app/src/bloc/products_bloc.dart';
 
 class Provider extends InheritedWidget {
+  final loginBloc = new LoginBloc();
+  final _productsBloc = new ProductsBloc();
+
   static Provider _instance;
 
   factory Provider({Key key, Widget child}) {
@@ -14,12 +19,14 @@ class Provider extends InheritedWidget {
 
   Provider._internal({Key key, Widget child}) : super(key: key, child: child);
 
-  final loginBloc = LoginBloc();
-
   @override
   bool updateShouldNotify(InheritedWidget oldWidget) => true;
 
   static LoginBloc of(BuildContext context) {
     return context.dependOnInheritedWidgetOfExactType<Provider>().loginBloc;
+  }
+
+  static ProductsBloc productsBloc(BuildContext context) {
+    return context.dependOnInheritedWidgetOfExactType<Provider>()._productsBloc;
   }
 }

@@ -4,7 +4,7 @@ import 'package:products_shop_app/src/bloc/provider.dart';
 import 'package:products_shop_app/src/providers/user_provider.dart';
 import 'package:products_shop_app/src/utils/utils.dart';
 
-class LoginPage extends StatelessWidget {
+class SignUp extends StatelessWidget {
   final userProvider = new UserProvider();
 
   @override
@@ -102,7 +102,7 @@ class LoginPage extends StatelessWidget {
                 ]),
             child: Column(
               children: [
-                Text('Login', style: TextStyle(fontSize: 20.0)),
+                Text('New account', style: TextStyle(fontSize: 20.0)),
                 SizedBox(height: 60.0),
                 _createEmail(bloc),
                 SizedBox(height: 30.0),
@@ -113,8 +113,8 @@ class LoginPage extends StatelessWidget {
             ),
           ),
           FlatButton(
-            child: Text('Sign up'),
-            onPressed: () => Navigator.pushReplacementNamed(context, 'signup'),
+            child: Text('Already have an account? Login'),
+            onPressed: () => Navigator.pushReplacementNamed(context, 'login'),
           ),
           SizedBox(height: 100.0),
         ],
@@ -173,21 +173,23 @@ class LoginPage extends StatelessWidget {
         return RaisedButton(
           child: Container(
             padding: EdgeInsets.symmetric(horizontal: 80.0, vertical: 15.0),
-            child: Text('login'),
+            child: Text('Create account'),
           ),
           shape:
               RoundedRectangleBorder(borderRadius: BorderRadius.circular(5.0)),
           elevation: 0.0,
           color: Colors.deepPurple,
           textColor: Colors.white,
-          onPressed: snapshot.hasData ? () => _login(bloc, context) : null,
+          onPressed: snapshot.hasData ? () => _register(bloc, context) : null,
         );
       },
     );
   }
 
-  _login(LoginBloc bloc, BuildContext context) async {
-    Map info = await userProvider.login(bloc.email, bloc.password);
+  _register(LoginBloc bloc, BuildContext context) async {
+    // Navigator.pushReplacementNamed(context, 'home');
+    final info = await userProvider.newUser(bloc.email, bloc.password);
+
     if (info['ok']) {
       Navigator.pushReplacementNamed(context, 'home');
     } else {

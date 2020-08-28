@@ -2,8 +2,8 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:products_shop_app/src/bloc/provider.dart';
 import 'package:products_shop_app/src/models/product_model.dart';
-import 'package:products_shop_app/src/providers/products_provider.dart';
 import 'package:products_shop_app/src/utils/utils.dart' as utils;
 
 class ProductPage extends StatefulWidget {
@@ -14,7 +14,7 @@ class ProductPage extends StatefulWidget {
 class _ProductPageState extends State<ProductPage> {
   final formKey = GlobalKey<FormState>();
   final scaffoldKey = GlobalKey<ScaffoldState>();
-  final productProvider = new ProductsProvider();
+  ProductsBloc productsBloc;
   ProductModel product = new ProductModel();
   bool _saving = false;
   File photo;
@@ -22,6 +22,7 @@ class _ProductPageState extends State<ProductPage> {
   @override
   Widget build(BuildContext context) {
     final ProductModel prodData = ModalRoute.of(context).settings.arguments;
+    productsBloc = Provider.productsBloc(context);
     if (prodData != null) {
       product = prodData;
     }
@@ -124,13 +125,13 @@ class _ProductPageState extends State<ProductPage> {
     });
 
     if (photo != null) {
-      product.urlPicture = await productProvider.uploadImage(photo);
+      product.urlPicture = await productsBloc.uploadPhoto(photo);
     }
 
     if (product.id == null) {
-      productProvider.createProduct(product);
+      productsBloc.addProduct(product);
     } else {
-      productProvider.editProduct(product);
+      productsBloc.editProduct(product);
     }
 
     // setState(() {
